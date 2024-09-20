@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,11 +18,21 @@ namespace Grid
             
             if (!IsPostBack)
             {
-                int empid =Convert.ToInt32(Request.QueryString["lbl1"]);
-                if (empid>0)
+                int empid =Convert.ToInt32(Request.QueryString["empid"]);
+                string name = Request.QueryString["name"];
+                if (empid > 0 && name!=null)
                 {
                     LoadData(empid);
                     btnSumbit.Visible = false;
+                    rdl.Enabled = true;
+                    rd2.Enabled = true;
+                }
+                else if (empid > 0)
+                {
+                    LoadData(empid);
+                    btnSumbit.Visible = false;
+                    rdl.Enabled = false;
+                    rd2.Enabled = false;
                 }
                 else
                 {
@@ -62,6 +72,15 @@ namespace Grid
             ddlCity.SelectedItem.Text = dt.Rows[0][5].ToString();
             txtUsername.Text = dt.Rows[0][6].ToString();
             txtPassword.Text = dt.Rows[0][7].ToString();
+            string status = dt.Rows[0][8].ToString();
+            if(status=="Active")
+            {
+                rdl.Checked = true;
+            }
+            else 
+            {
+                rd2.Checked = true;
+            }
         }
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -78,8 +97,16 @@ namespace Grid
             {
                 gender = "Others";
             }
-
-            int empid = Convert.ToInt32(Request.QueryString["lbl1"]);
+            int status;
+            if (rdl.Checked)
+            {
+                status = 1;
+            }
+            else
+            {
+                status = 0;
+            }
+            int empid = Convert.ToInt32(Request.QueryString["empid"]);
             SqlConnection sc = new SqlConnection(conn);
             SqlCommand cmd = new SqlCommand("UpdateEmploye", sc);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -93,6 +120,7 @@ namespace Grid
             cmd.Parameters.AddWithValue("@countryid",ddlCountry.SelectedValue );
             cmd.Parameters.AddWithValue("@stateid", ddlState.SelectedValue);
             cmd.Parameters.AddWithValue("@cityid", ddlCity.SelectedValue);
+            cmd.Parameters.AddWithValue("@id", status);
             cmd.ExecuteNonQuery();
             sc.Close();
             Response.Redirect("Gridview.aspx");
@@ -115,20 +143,29 @@ namespace Grid
             {
                 gender = "others";
             }
+            int status;
+            if (rdl.Checked)
+            {
+                status = 1;
+            }
+            else
+            {
+                status = 0;
+            }
             try
             {
                 SqlConnection sc = new SqlConnection(conn);
                 SqlCommand cmd = new SqlCommand("AddEmploye", sc);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empName", txtName.Text);
-                cmd.Parameters.AddWithValue("@Gender", gender);
+                SqlParameter sqlParameter = cmd.Parameters.AddWithValue("@Gender", gender);
                 cmd.Parameters.AddWithValue("@empRole", ddlROle.SelectedValue);
                 cmd.Parameters.AddWithValue("@username", txtUsername.Text);
                 cmd.Parameters.AddWithValue("@password", txtPassword.Text);
                 cmd.Parameters.AddWithValue("@cityid", Convert.ToInt32(ddlCity.SelectedValue));
                 cmd.Parameters.AddWithValue("@stateid", Convert.ToInt32(ddlState.SelectedValue));
                 cmd.Parameters.AddWithValue("@countryid", Convert.ToInt32(ddlCountry.SelectedValue));
-
+                cmd.Parameters.AddWithValue("@id", status);
                 sc.Open();
                 cmd.ExecuteNonQuery();
                 sc.Close();
@@ -138,12 +175,14 @@ namespace Grid
             {
                 throw (ex);
             }
-            Response.Redirect("Gridview.aspx");
+
+            //Response.Redirect("Gridview.aspx");
         }
         protected void BindCountries()
         {
             SqlConnection sc = new SqlConnection(conn);
             SqlCommand cmd = new SqlCommand("GetAllCountries", sc);
+
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             sc.Open();
             SqlDataReader dr = cmd.ExecuteReader();
@@ -178,6 +217,7 @@ namespace Grid
             sc.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             ddlState.DataSource = dr;
+     
             ddlState.DataTextField = "state";
             ddlState.DataValueField = "StateId";
             ddlState.DataBind();
@@ -196,7 +236,6 @@ namespace Grid
                 ddlCity.Items.Clear();
                 ddlCity.Items.Add(new ListItem("Select City", "0"));
             }
-
         }
 
         protected void BindCities(int id)
