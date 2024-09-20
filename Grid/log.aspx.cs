@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace Grid
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             string username = txtUser.Text;
-            string password = txtPassword.Text;
+            string password = txtpassword.Text;
 
             SqlConnection sc = new SqlConnection(conn);
             SqlCommand cmd = new SqlCommand("Log", sc);
@@ -31,12 +31,24 @@ namespace Grid
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             sda.Fill(dt);
-            if (dt.Rows.Count > 0)
+
+            if (dt.Rows.Count > 0 && username == dt.Rows[0][4].ToString() && password == dt.Rows[0][5].ToString() && dt.Rows[0][9].ToString() == "Active")
             {
                 Session["username"] = txtUser.Text;
-                Session["password"] = txtPassword.Text;
+                Session["password"] = txtpassword.Text;
                 Response.Redirect("DetailsPage.aspx");
             }
+           else if (dt.Rows.Count > 0 && username == dt.Rows[0][4].ToString() &&  password == dt.Rows[0][5].ToString() && dt.Rows[0][9].ToString() == "Inactive")
+            {
+                
+                lbme.Text = "U Account is blocked Contact Admin";
+
+            }
+            else
+            {
+                lbme.Text = "Invalid Account";
+            }
+            
         }
 
         protected void Forget_Click(object sender, EventArgs e)
@@ -46,8 +58,7 @@ namespace Grid
 
         protected void btnNew_Click(object sender, EventArgs e)
         {
-            
-            Response.Redirect("Registration.aspx");
+            Response.Redirect("MainPage.aspx");
         }
 
     }
