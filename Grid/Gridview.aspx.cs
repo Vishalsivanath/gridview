@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -211,10 +211,14 @@ namespace Grid
 
         //    }
         //}
-        protected void btnadd_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("MainPage.aspx");
-        }
+        //protected void btnadd_Click(object sender, EventArgs e)
+        //{
+        //    Response.Redirect("MainPage.aspx");
+        //}
+        //protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+        //{
+
+        //}
         protected void btnGo_Click(object sender, EventArgs e)
         {
             string name = txtname.Text.Trim();
@@ -223,11 +227,12 @@ namespace Grid
             string country = txtCountry.Text.Trim();
             string state = txtState.Text.Trim();
             string city = txtCity.Text.Trim();
-            DataTable filteredData = GetFilteredData(name, gender, role, country, state, city);
+            string status = txtStatus.Text.Trim();
+            DataTable filteredData = GetFilteredData(name, gender, role, country, state, city, status);
             GridView1.DataSource = filteredData;
             GridView1.DataBind();
         }
-        private DataTable GetFilteredData(string name, string gender, string role, string country, string state, string city)
+        private DataTable GetFilteredData(string name, string gender, string role, string country, string state, string city, string status)
         {
             DataTable dt = new DataTable();
             SqlConnection sc = new SqlConnection(conn);
@@ -237,25 +242,29 @@ namespace Grid
                 cmd.Parameters.AddWithValue("@empName", name);
                 cmd.Parameters.AddWithValue("@gender", gender);
                 cmd.Parameters.AddWithValue("@empRole", role);
-                cmd.Parameters.AddWithValue("@country", country); 
+                cmd.Parameters.AddWithValue("@country", country);
                 cmd.Parameters.AddWithValue("@state", state);
-                cmd.Parameters.AddWithValue("@city", city); 
+                cmd.Parameters.AddWithValue("@city", city);
+                cmd.Parameters.AddWithValue("@status", status);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 sda.Fill(dt);
             }
-
+            
             return dt;
         }
-        //protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+        
+        //protected void btnedit_Click(object sender, EventArgs e)
         //{
-
+        //    Button btn = (Button)sender;
+        //    GridViewRow gvrow = (GridViewRow)btn.NamingContainer;
+        //    Label lbl1 = (Label)gvrow.FindControl("lbltextId");
+        //    Response.Redirect("MainPage.aspx?lbl1=" + lbl1.Text);
         //}
-        protected void btnedit_Click(object sender, EventArgs e)
+
+        protected void btn_Click(object sender, EventArgs e)
         {
-            Button btn= (Button)sender;
-            GridViewRow gvrow = (GridViewRow)btn.NamingContainer;
-            Label lbl1 = (Label)gvrow.FindControl("lbltextId");
-            Response.Redirect("MainPage.aspx?lbl1=" + lbl1.Text);        
+
+            GridView();
         }
     }
 }
