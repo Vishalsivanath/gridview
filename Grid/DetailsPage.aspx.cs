@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -35,7 +35,6 @@ namespace Grid
             GridView1.DataSource = dt;
             GridView1.DataBind();
         }
-
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
 
@@ -50,12 +49,19 @@ namespace Grid
             gridview();
         }
 
-        protected void btnedit_Click(object sender, EventArgs e)
+        protected void Button1_Click(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
-            GridViewRow gvrow = (GridViewRow)btn.NamingContainer;
-            Label lbl1 = (Label)gvrow.FindControl("lbltextId");
-            Response.Redirect("MainPage.aspx?lbl1=" + lbl1.Text);
+            Response.Redirect("log.aspx");
         }
+
+        //protected void btnedit_Click(object sender, EventArgs e)
+        //{
+        //    Button btn = (Button)sender;
+        //    GridViewRow gvrow = (GridViewRow)btn.NamingContainer;
+        //    Label lbl1 = (Label)gvrow.FindControl("lbltextId");
+        //    Response.Redirect("MainPage.aspx?lbl1=" + lbl1.Text);
+        //}
+
+
     }
 }
