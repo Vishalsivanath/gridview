@@ -1,10 +1,10 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DetailsPage.aspx.cs" Inherits="Grid.DetailsPage" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DetailsPage.aspx.cs" Inherits="Grid.DetailsPage" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Details</title>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -14,8 +14,9 @@
                 <Columns>
                     <asp:TemplateField HeaderText="ID" HeaderStyle-HorizontalAlign="Center">
                         <ItemTemplate> 
-                            <asp:Label ID="lbltextId" runat="server" Text='<%#Eval("empid")%>' ></asp:Label>
-                            <asp:TextBox ID="textId" runat="server"  Text='<%#Eval("empid")%>' Visible="false" ></asp:TextBox>
+                            <%--<asp:Label ID="lbltextId" runat="server" Text='<%#Eval("empid")%>' ></asp:Label>
+                            <asp:TextBox ID="textId" runat="server"  Text='<%#Eval("empid")%>' Visible="false" ></asp:TextBox>--%>
+                            <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl='<%# "~/MainPage.aspx?empid=" + Eval("empid") %>' Text='<%# Eval("empid") %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
 
@@ -56,7 +57,7 @@
                     <asp:TemplateField HeaderText="City">
                         <ItemTemplate>
                             <asp:Label ID="lbltext7" runat="server" Text='<%#Eval("city")%>' ></asp:Label>
-                            <asp:DropDownList ID="ddlcity" runat="server" Visible="false" ></asp:DropDownList>
+                            <asp:DropDownList ID="ddlcity" runat="server" Visible="false"  ></asp:DropDownList>
                         </ItemTemplate>
                         </asp:TemplateField>
                     <asp:TemplateField HeaderText="UserName">
@@ -71,10 +72,16 @@
                             <asp:TextBox ID="txtPassword" runat="server" Text='<%#Eval("Password") %>' Visible="false"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Status">
+                        <ItemTemplate>
+                            <asp:Label ID="lbltext10" runat="server" Text='<%#Eval("status")%>' ></asp:Label>
+                            <asp:Textbox ID="txtStatus" runat="server"  Text='<%#Eval("status") %>' Visible="false" ></asp:Textbox>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                    <asp:TemplateField>
                        <ItemTemplate>
-                           <asp:Button ID="btnedit" runat="server" Text="Edit" CommandName="Edit" OnClick="btnedit_Click"/>
-                           <asp:Button ID="Button1" runat="server" Text="Delete" CommandName="Delete" />
+                           <%--<asp:Button ID="btnedit" runat="server" Text="Edit" CommandName="Edit" OnClick="btnedit_Click"/>--%>
+                           <asp:Button ID="Button1" runat="server" Text="LogOut" OnClick="Button1_Click"/>
                        </ItemTemplate>
                        
                    </asp:TemplateField>
